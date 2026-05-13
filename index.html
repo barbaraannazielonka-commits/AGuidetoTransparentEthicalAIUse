@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en" id="html-root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI in the Writing Classroom — A Guide to Transparent and Ethical AI Use</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose:#F9E4E8;--rose-mid:#F0B8C4;--rose-dk:#C0637A;--rose-txt:#7A2F41;
+    --sage:#E2EFE3;--sage-mid:#A8CFAB;--sage-dk:#5A9260;--sage-txt:#2D5C31;
+    --sky:#DFF0F9;--sky-mid:#9DD0EE;--sky-dk:#4A9EC4;--sky-txt:#1B5F80;
+    --lemon:#FEF7DC;--lemon-mid:#F5DF8A;--lemon-dk:#C9A227;--lemon-txt:#7A5F0A;
+    --lavender:#EDE8F9;--lav-mid:#C4B6EE;--lav-dk:#7B62CE;--lav-txt:#402E8A;
+    --peach:#FDEEE4;--peach-mid:#F6C8A8;--peach-dk:#D4804E;--peach-txt:#7A3B18;
+    --cream:#FBF8F2;--sand:#F3EDE1;--ink:#2C2825;--ink-mid:#5C5650;--ink-light:#9C9690;
+    --radius:12px;--radius-sm:8px;--nav-w:260px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;font-weight:400;background:var(--cream);color:var(--ink);font-size:16px;line-height:1.75;}
+
+  nav{position:fixed;top:0;left:0;width:var(--nav-w);height:100vh;background:var(--sand);border-right:1px solid var(--rose-mid);overflow-y:auto;z-index:100;padding:2rem 0 3rem;display:flex;flex-direction:column;}
+  .nav-logo{padding:0 1.5rem 1.5rem;border-bottom:1px solid var(--rose-mid);margin-bottom:1rem;}
+  .nav-logo .logo-badge{display:inline-block;background:var(--rose);color:var(--rose-txt);font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:20px;border:1px solid var(--rose-mid);margin-bottom:8px;}
+  .nav-logo h1{font-family:'Lora',serif;font-size:15px;font-weight:600;color:var(--ink);line-height:1.4;}
+  .nav-section-label{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-light);padding:.8rem 1.5rem .3rem;}
+  nav a{display:block;padding:6px 1.5rem 6px 1.25rem;font-size:13px;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all .15s;line-height:1.4;cursor:pointer;}
+  nav a:hover{color:var(--ink);background:var(--rose);border-left-color:var(--rose-mid);}
+  nav a.active{color:var(--rose-txt);background:var(--rose);border-left-color:var(--rose-dk);font-weight:500;}
+
+  .lang-toggle{display:flex;gap:6px;padding:1rem 1.5rem .5rem;margin-top:auto;border-top:1px solid var(--rose-mid);}
+  .lang-btn{padding:4px 10px;border-radius:20px;border:1px solid var(--rose-mid);background:white;color:var(--ink-mid);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif;}
+  .lang-btn.active{background:var(--rose);color:var(--rose-txt);border-color:var(--rose-dk);}
+
+  main{margin-left:var(--nav-w);min-height:100vh;}
+
+  .hero{background:linear-gradient(135deg,var(--rose) 0%,var(--lavender) 50%,var(--sky) 100%);padding:5rem 4rem 4rem;border-bottom:1px solid var(--rose-mid);position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,.25);}
+  .hero::after{content:'';position:absolute;bottom:-40px;left:30%;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.15);}
+  .hero h1{font-family:'Lora',serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:600;color:var(--ink);line-height:1.25;max-width:700px;margin-bottom:1rem;}
+  .hero h1 em{font-style:italic;color:var(--rose-txt);}
+  .hero p{font-size:17px;color:var(--ink-mid);max-width:580px;margin-bottom:2rem;line-height:1.7;}
+  .hero-chips{display:flex;gap:8px;flex-wrap:wrap;}
+  .chip{display:inline-flex;align-items:center;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;border:1px solid;}
+  .chip-sage{background:var(--sage);color:var(--sage-txt);border-color:var(--sage-mid);}
+  .chip-sky{background:var(--sky);color:var(--sky-txt);border-color:var(--sky-mid);}
+  .chip-lav{background:var(--lavender);color:var(--lav-txt);border-color:var(--lav-mid);}
+
+  .section-page{padding:3.5rem 4rem;border-bottom:1px solid var(--sand);max-width:900px;}
+  .section-num{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.5rem;}
+  h2.section-title{font-family:'Lora',serif;font-size:1.9rem;font-weight:600;color:var(--ink);line-height:1.3;margin-bottom:1.25rem;}
+  h3{font-family:'Lora',serif;font-size:1.15rem;font-weight:600;color:var(--ink);margin:2rem 0 .75rem;padding-bottom:.4rem;border-bottom:1px solid var(--sand);}
+  h4{font-size:14px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-mid);margin:1.5rem 0 .6rem;}
+  p{margin-bottom:1rem;color:var(--ink);}
+  p:last-child{margin-bottom:0;}
+
+  .table-wrap{overflow-x:auto;margin:1.5rem 0;border-radius:var(--radius);border:1px solid var(--rose-mid);}
+  table{width:100%;border-collapse:collapse;font-size:14px;}
+  th{background:var(--rose);color:var(--rose-txt);font-weight:500;font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:1px solid var(--rose-mid);}
+  td{padding:10px 14px;border-bottom:1px solid #f0ebe5;vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  tr:nth-child(even) td{background:var(--cream);}
+  tr:hover td{background:var(--rose);}
+
+  .callout{border-radius:var(--radius);padding:1.5rem 1.75rem;margin:1.75rem 0;border-left:4px solid;}
+  .callout strong{display:block;margin-bottom:.4rem;font-weight:500;}
+  .callout-rose{background:var(--rose);border-color:var(--rose-dk);}
+  .callout-rose strong{color:var(--rose-txt);}
+  .callout-sage{background:var(--sage);border-color:var(--sage-dk);}
+  .callout-sage strong{color:var(--sage-txt);}
+  .callout-sky{background:var(--sky);border-color:var(--sky-dk);}
+  .callout-sky strong{color:var(--sky-txt);}
+  .callout-lemon{background:var(--lemon);border-color:var(--lemon-dk);}
+  .callout-lemon strong{color:var(--lemon-txt);}
+  .callout-lav{background:var(--lavender);border-color:var(--lav-dk);}
+  .callout-lav strong{color:var(--lav-txt);}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin:1.5rem 0;}
+  .card{border-radius:var(--radius);padding:1.25rem 1.5rem;border:1px solid;}
+  .card-icon{font-size:22px;margin-bottom:.6rem;}
+  .card h5{font-size:14px;font-weight:500;margin-bottom:.4rem;}
+  .card p{font-size:13px;margin:0;color:var(--ink-mid);}
+  .card-rose{background:var(--rose);border-color:var(--rose-mid);}  .card-rose h5{color:var(--rose-txt);}
+  .card-sage{background:var(--sage);border-color:var(--sage-mid);}  .card-sage h5{color:var(--sage-txt);}
+  .card-sky{background:var(--sky);border-color:var(--sky-mid);}    .card-sky h5{color:var(--sky-txt);}
+  .card-lemon{background:var(--lemon);border-color:var(--lemon-mid);} .card-lemon h5{color:var(--lemon-txt);}
+  .card-lav{background:var(--lavender);border-color:var(--lav-mid);} .card-lav h5{color:var(--lav-txt);}
+
+  .checklist{list-style:none;margin:1rem 0;}
+  .checklist li{display:flex;align-items:flex-start;gap:10px;padding:7px 0;font-size:14.5px;border-bottom:1px solid var(--sand);color:var(--ink-mid);}
+  .checklist li:last-child{border-bottom:none;}
+  .checklist li::before{content:'☐';font-size:16px;flex-shrink:0;color:var(--rose-dk);margin-top:1px;}
+  .blist{list-style:none;margin:.75rem 0 1rem;padding:0;}
+  .blist li{padding:4px 0 4px 1.5rem;position:relative;font-size:14.5px;color:var(--ink-mid);}
+  .blist li::before{content:'•';position:absolute;left:.4rem;color:var(--rose-dk);}
+  .steps{counter-reset:step;list-style:none;margin:1rem 0;}
+  .steps li{counter-increment:step;display:flex;gap:1rem;margin-bottom:1rem;font-size:14.5px;align-items:flex-start;}
+  .steps li::before{content:counter(step);display:flex;align-items:center;justify-content:center;flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--rose);color:var(--rose-txt);font-size:12px;font-weight:500;border:1px solid var(--rose-mid);margin-top:2px;}
+
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0;}
+  .compare-box{border-radius:var(--radius);padding:1.25rem 1.5rem;border:1px solid;}
+  .compare-box h5{font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem;}
+  .compare-bad{background:#fff5f7;border-color:var(--rose-mid);}
+  .compare-bad h5{color:var(--rose-txt);}
+  .compare-good{background:var(--sage);border-color:var(--sage-mid);}
+  .compare-good h5{color:var(--sage-txt);}
+  .compare-box p{font-size:13px;font-style:italic;color:var(--ink-mid);margin-bottom:.6rem;}
+  .compare-box .reason{font-size:12px;color:var(--ink-light);font-style:normal;margin-top:.5rem;border-top:1px dashed;padding-top:.5rem;}
+  .compare-bad .reason{border-color:var(--rose-mid);}
+  .compare-good .reason{border-color:var(--sage-mid);}
+
+  .badge{display:inline-block;font-size:11px;font-weight:500;padding:2px 9px;border-radius:20px;border:1px solid;}
+  .badge-rose{background:var(--rose);color:var(--rose-txt);border-color:var(--rose-mid);}
+  .badge-sage{background:var(--sage);color:var(--sage-txt);border-color:var(--sage-mid);}
+  .badge-sky{background:var(--sky);color:var(--sky-txt);border-color:var(--sky-mid);}
+  .badge-lemon{background:var(--lemon);color:var(--lemon-txt);border-color:var(--lemon-mid);}
+  .badge-lav{background:var(--lavender);color:var(--lav-txt);border-color:var(--lav-mid);}
+  .badge-peach{background:var(--peach);color:var(--peach-txt);border-color:var(--peach-mid);}
+  .badge-grey{background:var(--sand);color:var(--ink-mid);border-color:#d0cbc4;}
+
+  .method-card{border-radius:var(--radius);border:1px solid;margin:1.5rem 0;overflow:hidden;}
+  .method-header{padding:1rem 1.5rem;display:flex;align-items:center;gap:1rem;border-bottom:1px solid;}
+  .method-num{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Lora',serif;font-size:15px;font-weight:600;flex-shrink:0;}
+  .method-header h4{margin:0;text-transform:none;letter-spacing:0;font-size:15px;font-family:'Lora',serif;font-weight:600;}
+  .method-body{padding:1.25rem 1.5rem;}
+  .method-body p{font-size:14px;}
+  .m-rose{border-color:var(--rose-mid);}  .m-rose .method-header{background:var(--rose);border-color:var(--rose-mid);}  .m-rose .method-num{background:var(--rose-mid);color:var(--rose-txt);}  .m-rose .method-header h4{color:var(--rose-txt);}
+  .m-sage{border-color:var(--sage-mid);}  .m-sage .method-header{background:var(--sage);border-color:var(--sage-mid);}  .m-sage .method-num{background:var(--sage-mid);color:var(--sage-txt);}  .m-sage .method-header h4{color:var(--sage-txt);}
+  .m-sky{border-color:var(--sky-mid);}    .m-sky .method-header{background:var(--sky);border-color:var(--sky-mid);}    .m-sky .method-num{background:var(--sky-mid);color:var(--sky-txt);}    .m-sky .method-header h4{color:var(--sky-txt);}
+  .m-lemon{border-color:var(--lemon-mid);}.m-lemon .method-header{background:var(--lemon);border-color:var(--lemon-mid);}.m-lemon .method-num{background:var(--lemon-mid);color:var(--lemon-txt);}.m-lemon .method-header h4{color:var(--lemon-txt);}
+  .m-lav{border-color:var(--lav-mid);}    .m-lav .method-header{background:var(--lavender);border-color:var(--lav-mid);}    .m-lav .method-num{background:var(--lav-mid);color:var(--lav-txt);}    .m-lav .method-header h4{color:var(--lav-txt);}
+  .m-peach{border-color:var(--peach-mid);}.m-peach .method-header{background:var(--peach);border-color:var(--peach-mid);}.m-peach .method-num{background:var(--peach-mid);color:var(--peach-txt);}.m-peach .method-header h4{color:var(--peach-txt);}
+  .m-grey{border-color:#d0cbc4;}          .m-grey .method-header{background:var(--sand);border-color:#d0cbc4;}           .m-grey .method-num{background:#ddd8d0;color:var(--ink-mid);}          .m-grey .method-header h4{color:var(--ink-mid);}
+
+  .big-quote{border-radius:var(--radius);padding:2rem 2.5rem;margin:2rem 0;text-align:center;}
+  .big-quote p{font-family:'Lora',serif;font-size:1.25rem;font-style:italic;line-height:1.6;margin:0;}
+
+  .example{border-radius:var(--radius-sm);padding:1rem 1.25rem;font-size:13.5px;font-style:italic;margin:.75rem 0;border-left:3px solid;line-height:1.7;color:var(--ink-mid);}
+  .ex-sky{background:var(--sky);border-color:var(--sky-dk);}
+  .ex-lav{background:var(--lavender);border-color:var(--lav-dk);}
+  .ex-rose{background:var(--rose);border-color:var(--rose-dk);}
+  .example cite{display:block;font-size:12px;font-style:normal;margin-top:.4rem;font-weight:500;}
+  .ex-sky cite{color:var(--sky-txt);}
+  .ex-lav cite{color:var(--lav-txt);}
+
+  .prompt-block{background:#faf8f5;border:1px solid var(--lemon-mid);border-radius:var(--radius-sm);padding:1rem 1.25rem;font-family:'Courier New',monospace;font-size:13px;line-height:1.7;color:var(--ink-mid);margin:.75rem 0;white-space:pre-wrap;}
+  .prompt-label{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--lemon-txt);margin-bottom:6px;}
+
+  .accordion{border-radius:var(--radius);overflow:hidden;border:1px solid var(--rose-mid);margin:1rem 0;}
+  .accordion-item{border-bottom:1px solid var(--rose-mid);}
+  .accordion-item:last-child{border-bottom:none;}
+  .accordion-btn{width:100%;background:none;border:none;padding:.9rem 1.25rem;text-align:left;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:var(--ink);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:1rem;transition:background .15s;}
+  .accordion-btn:hover{background:var(--rose);}
+  .accordion-btn .arrow{transition:transform .2s;font-size:12px;color:var(--rose-dk);flex-shrink:0;}
+  .accordion-btn.open .arrow{transform:rotate(90deg);}
+  .accordion-content{display:none;padding:.5rem 1.25rem 1rem;font-size:14px;color:var(--ink-mid);background:var(--cream);}
+  .accordion-content.open{display:block;}
+
+  footer{background:var(--sand);border-top:1px solid var(--rose-mid);padding:2rem 4rem;text-align:center;}
+  footer p{font-size:13px;color:var(--ink-light);margin:0;}
+
+  .menu-btn{display:none;position:fixed;top:14px;left:14px;z-index:200;background:white;border:1px solid var(--rose-mid);border-radius:var(--radius-sm);padding:8px 10px;cursor:pointer;font-size:18px;line-height:1;color:var(--rose-dk);}
+
+  @media(max-width:780px){
+    .menu-btn{display:block;}
+    nav{transform:translateX(-100%);transition:transform .25s;}
+    nav.open{transform:translateX(0);}
+    main{margin-left:0;}
+    .hero,.section-page{padding:2rem 1.5rem;}
+    .compare{grid-template-columns:1fr;}
+    footer{padding:2rem 1.5rem;}
+  }
+
+  /* Language switching */
+  .lang-en .no-only{display:none;}
+  .lang-no .en-only{display:none;}
+</style>
+</head>
+<body class="lang-en" id="body-root">
+
+<button class="menu-btn" id="menuBtn">☰</button>
+
+<nav id="sidebar">
+  <div class="nav-logo">
+    <div class="logo-badge">Teacher's Guide</div>
+    <h1>AI in the Writing Classroom</h1>
+  </div>
+
+  <span class="nav-section-label en-only">Philosophy</span>
+  <span class="nav-section-label no-only">Filosofi</span>
+  <a data-target="s1">1. <span class="en-only">Why Transparency Matters</span><span class="no-only">Hvorfor åpenhet er viktig</span></a>
+  <a data-target="s2">2. <span class="en-only">Seeing How Students Think</span><span class="no-only">Se hvordan elever tenker</span></a>
+
+  <span class="nav-section-label en-only">Classroom Framework</span>
+  <span class="nav-section-label no-only">Rammeverk for undervisning</span>
+  <a data-target="s3">3. <span class="en-only">AI-Free vs. AI-Permitted</span><span class="no-only">Uten KI vs. med KI</span></a>
+  <a data-target="s4">4. <span class="en-only">The Three Obligations</span><span class="no-only">De tre forpliktelsene</span></a>
+
+  <span class="nav-section-label en-only">Documentation Methods</span>
+  <span class="nav-section-label no-only">Dokumentasjonsmetoder</span>
+  <a data-target="s5">5. <span class="en-only">Seven Documentation Methods</span><span class="no-only">Syv dokumentasjonsmetoder</span></a>
+  <a data-target="s6">6. <span class="en-only">Crafting Strong Prompts</span><span class="no-only">Gode instruksjoner til KI</span></a>
+
+  <span class="nav-section-label en-only">Verification Tools</span>
+  <span class="nav-section-label no-only">Verifikasjonsverktøy</span>
+  <a data-target="s7">7. <span class="en-only">Quick Talk</span><span class="no-only">Rask muntlig sjekk</span></a>
+  <a data-target="s8">8. <span class="en-only">The AI-Generated Quiz</span><span class="no-only">KI-generert quiz</span></a>
+
+  <span class="nav-section-label en-only">Transparency Platform</span>
+  <span class="nav-section-label no-only">Transparensplattform</span>
+  <a data-target="s9">9. <span class="en-only">PETRA AI</span><span class="no-only">PETRA KI</span></a>
+
+  <span class="nav-section-label en-only">Assessment</span>
+  <span class="nav-section-label no-only">Vurdering</span>
+  <a data-target="s10">10. <span class="en-only">What Teachers Look For</span><span class="no-only">Hva læreren ser etter</span></a>
+  <a data-target="s11">11. <span class="en-only">Model Examples</span><span class="no-only">Eksempler på elevarbeid</span></a>
+
+  <div class="lang-toggle">
+    <button class="lang-btn active" id="btnEn" onclick="setLang('en')">🇬🇧 EN</button>
+    <button class="lang-btn" id="btnNo" onclick="setLang('no')">🇳🇴 NO</button>
+  </div>
+</nav>
+
+<main>
+
+<div class="hero" id="hero">
+  <h1 class="en-only">AI in the Writing Classroom:<br><em>A Guide to Transparent and Ethical AI Use</em></h1>
+  <h1 class="no-only">KI i skriveundervisningen:<br><em>En guide til åpen og etisk KI-bruk</em></h1>
+  <p class="en-only">Students are not looking for permission to use AI. They are looking for guidance on how to use it well. This guide is for both teachers and students.</p>
+  <p class="no-only">Elever spør ikke om lov til å bruke KI. De søker veiledning i hvordan de kan bruke det godt. Denne guiden er for både lærere og elever.</p>
+  <div class="hero-chips">
+    <span class="chip chip-sage">✦ English Vg1, English 1 &amp; 2</span>
+    <span class="chip chip-lav">✦ Nannestad High School</span>
+  </div>
+</div>
+
+<!-- S1 -->
+<section id="s1" class="section-page">
+  <div class="section-num" style="color:var(--rose-dk)"><span class="en-only">Section 1</span><span class="no-only">Seksjon 1</span></div>
+  <h2 class="section-title en-only">Why Transparency Matters</h2>
+  <h2 class="section-title no-only">Hvorfor åpenhet er viktig</h2>
+  <p class="en-only">This guide exists because <strong>how</strong> you use AI is just as important as <strong>what</strong> you produce. When you document your AI use honestly, you do something most adults in workplaces have not yet learned to do: you think critically about your tools.</p>
+  <p class="no-only">Denne guiden finnes fordi <strong>hvordan</strong> du bruker KI er like viktig som <strong>hva</strong> du produserer. Når du dokumenterer bruken din ærlig, gjør du noe de fleste voksne i arbeidslivet ennå ikke har lært: du tenker kritisk om verktøyene dine.</p>
+  <div class="big-quote" style="background:var(--rose)">
+    <p class="en-only" style="color:var(--rose-txt)">"AI is a thinking tool, not a shortcut."</p>
+    <p class="no-only" style="color:var(--rose-txt)">«KI er et tankeverktøy, ikke en snarvei.»</p>
+  </div>
+  <h3 class="en-only">Why Transparency Is Central to This Course</h3>
+  <h3 class="no-only">Hvorfor åpenhet er kjernen i dette faget</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th><span class="en-only">Reason</span><span class="no-only">Årsak</span></th><th><span class="en-only">What it means for you</span><span class="no-only">Hva det betyr for deg</span></th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge badge-rose en-only">Academic integrity</span><span class="badge badge-rose no-only">Akademisk integritet</span></td><td><span class="en-only">Claiming AI text as entirely your own is dishonest. Documenting your use protects you.</span><span class="no-only">Å hevde at KI-tekst er helt din egen er uærlig. Å dokumentere bruken din beskytter deg.</span></td></tr>
+      <tr><td><span class="badge badge-sage en-only">Real-world skill</span><span class="badge badge-sage no-only">Arbeidslivskompetanse</span></td><td><span class="en-only">Every workplace will require workers to evaluate, edit, and take responsibility for AI-generated content.</span><span class="no-only">Alle arbeidsplasser vil kreve at ansatte vurderer, redigerer og tar ansvar for KI-generert innhold.</span></td></tr>
+      <tr><td><span class="badge badge-sky en-only">Learning in the edits</span><span class="badge badge-sky no-only">Læring i redigeringen</span></td><td><span class="en-only">The moment you change something the AI wrote and explain why is the moment writing skill develops.</span><span class="no-only">Det øyeblikket du endrer noe KI skrev og forklarer hvorfor, er øyeblikket skriveferdighetene utvikles.</span></td></tr>
+      <tr><td><span class="badge badge-lav en-only">Models good practice</span><span class="badge badge-lav no-only">Modellerer god praksis</span></td><td><span class="en-only">Your teacher models this behaviour. Transparent AI use is becoming a professional standard.</span><span class="no-only">Læreren din modellerer denne atferden. Transparent KI-bruk er i ferd med å bli en profesjonell standard.</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- S2 -->
+<section id="s2" class="section-page">
+  <div class="section-num" style="color:var(--lav-dk)"><span class="en-only">Section 2</span><span class="no-only">Seksjon 2</span></div>
+  <h2 class="section-title en-only">Why Educators Need to See How Students Think</h2>
+  <h2 class="section-title no-only">Hvorfor lærere trenger å se hvordan elever tenker</h2>
+  <p class="en-only">When a student submits a polished essay with no record of process, the teacher learns nothing about them as a thinker. Transparency requirements change this entirely.</p>
+  <p class="no-only">Når en elev leverer et polert essay uten prosessdokumentasjon, lærer læreren ingenting om dem som tenker. Åpenhetskrav endrer dette fullstendig.</p>
+  <div class="big-quote" style="background:var(--lavender)">
+    <p class="en-only" style="color:var(--lav-txt)">"Students are not looking for permission to use AI — they are looking for guidance on how to use it well."</p>
+    <p class="no-only" style="color:var(--lav-txt)">«Elever ber ikke om lov til å bruke KI — de søker veiledning i hvordan de kan bruke det godt.»</p>
+  </div>
+  <h3 class="en-only">What Transparency Reveals</h3>
+  <h3 class="no-only">Hva åpenhet avslører</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th><span class="en-only">What you see</span><span class="no-only">Hva du ser</span></th><th><span class="en-only">What it tells the teacher</span><span class="no-only">Hva det forteller læreren</span></th></tr></thead>
+    <tbody>
+      <tr><td class="en-only">The prompts they wrote</td><td class="en-only">Whether they understood the task — a vague prompt often means the student did not yet know what they were trying to say.</td></tr>
+      <tr class="no-only"><td>Instruksjonene de skrev</td><td>Om de forsto oppgaven — en vag instruksjon betyr ofte at eleven ikke visste hva de prøvde å si.</td></tr>
+      <tr><td class="en-only">What they rejected from AI output</td><td class="en-only">Their critical reading ability. Rejecting a cliché and explaining why shows more skill than accepting perfect grammar.</td></tr>
+      <tr class="no-only"><td>Hva de forkastet fra KI-output</td><td>Deres kritiske leseferdighet. Å forkaste en klisjé og forklare hvorfor viser mer kompetanse enn å godta perfekt grammatikk.</td></tr>
+      <tr><td class="en-only">Where they added their own knowledge</td><td class="en-only">Whether they brought genuine understanding to the task, or whether AI supplied all the content.</td></tr>
+      <tr class="no-only"><td>Hvor de la til egne kunnskaper</td><td>Om de hadde genuin forståelse for oppgaven, eller om KI leverte alt innholdet.</td></tr>
+      <tr><td class="en-only">What surprised or confused them</td><td class="en-only">How curious and self-aware they are. The best students notice when AI sounds authoritative but is wrong.</td></tr>
+      <tr class="no-only"><td>Hva som overrasket eller forvirret dem</td><td>Hvor nysgjerrige og selvbevisste de er. De beste elevene legger merke til når KI høres autoritativ ut, men tar feil.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout callout-lemon">
+    <strong class="en-only">A note for students:</strong>
+    <strong class="no-only">En merknad til elever:</strong>
+    <span class="en-only">Being transparent about AI does not lower your grade. It is the evidence of your thinking. A student who shows three prompt versions, explains what they rejected, verifies a statistic, and rewrites the ending demonstrates far more skill than a student who submits a clean AI essay with no trace of thought.</span>
+    <span class="no-only">Å være åpen om KI senker ikke karakteren din. Det er bevis på tenkningen din. En elev som viser tre instruksjonsversjoner, forklarer hva de forkastet, verifiserer en statistikk og omskriver avslutningen, demonstrerer langt mer kompetanse enn en elev som leverer et rent KI-essay uten spor av tanke.</span>
+  </div>
+</section>
+
+<!-- S3 -->
+<section id="s3" class="section-page">
+  <div class="section-num" style="color:var(--sage-dk)"><span class="en-only">Section 3</span><span class="no-only">Seksjon 3</span></div>
+  <h2 class="section-title en-only">AI-Free vs. AI-Permitted Tasks</h2>
+  <h2 class="section-title no-only">Oppgaver uten KI og oppgaver med KI</h2>
+  <p class="en-only">Not every task uses AI. That is intentional. Learning to write <strong>without</strong> AI in some tasks makes you a better editor of AI output in others.</p>
+  <p class="no-only">Ikke alle oppgaver bruker KI. Det er bevisst. Å lære å skrive <strong>uten</strong> KI i noen oppgaver gjør deg til en bedre redaktør av KI-output i andre.</p>
+  <div class="compare">
+    <div class="compare-box compare-bad">
+      <h5 class="en-only">🚫 AI-Free Tasks</h5>
+      <h5 class="no-only">🚫 Oppgaver uten KI</h5>
+      <p class="en-only">Build your own voice, instincts, and stamina as a writer. Produce writing that is genuinely yours.</p>
+      <p class="no-only">Bygg din egen stemme, dine instinkter og din utholdenhet som skribent.</p>
+      <div class="reason en-only">Examples: in-class timed writing, personal narratives, handwritten journals.</div>
+      <div class="reason no-only">Eksempler: tidsbestemt skriving i klassen, personlige fortellinger, håndskrevne dagbøker.</div>
+    </div>
+    <div class="compare-box compare-good">
+      <h5 class="en-only">✅ AI-Permitted Tasks</h5>
+      <h5 class="no-only">✅ Oppgaver med KI</h5>
+      <p class="en-only">Develop judgement: how to prompt, evaluate, verify, and edit AI output — with full transparency.</p>
+      <p class="no-only">Utvikle vurderingsevne: hvordan instruere, evaluere, verifisere og redigere KI-output — med full åpenhet.</p>
+      <div class="reason en-only">Examples: research tasks, multi-draft assignments, cross-audience writing projects.</div>
+      <div class="reason no-only">Eksempler: forskningsoppgaver, flerversjonsutkast, skriveprosjekter for ulike lesere.</div>
+    </div>
+  </div>
+  <div class="cards">
+    <div class="card card-rose"><div class="card-icon">✍️</div><h5 class="en-only">Task A — AI-Free</h5><h5 class="no-only">Oppgave A — Uten KI</h5><p class="en-only">Personal narrative, 40 min in class. Describe a moment you changed your mind.</p><p class="no-only">Personlig fortelling, 40 min i klassen. Beskriv et øyeblikk du endret mening.</p></div>
+    <div class="card card-sage"><div class="card-icon">🔄</div><h5 class="en-only">Task B — Structured AI Use</h5><h5 class="no-only">Oppgave B — Strukturert KI-bruk</h5><p class="en-only">Cross-audience writing project. Full prompt log, verification table, and reflection required.</p><p class="no-only">Skriveprosjekt for ulike lesere. Fullstendig instruksjonslogg, verifiseringstabell og refleksjon kreves.</p></div>
+    <div class="card card-sky"><div class="card-icon">🔍</div><h5 class="en-only">Task C — AI for Research Only</h5><h5 class="no-only">Oppgave C — KI kun til forskning</h5><p class="en-only">Argumentative essay. AI for background only. All writing must be the student's own.</p><p class="no-only">Argumenterende essay. KI kun for bakgrunn. All skriving må være elevens egen.</p></div>
+    <div class="card card-lav"><div class="card-icon">✏️</div><h5 class="en-only">Task D — AI as Editor</h5><h5 class="no-only">Oppgave D — KI som redaktør</h5><p class="en-only">Student writes a full draft. Then asks AI: "What are the three weakest parts?" Student evaluates the feedback.</p><p class="no-only">Eleven skriver et fullt utkast. Spør KI: «Hva er de tre svakeste delene?» Eleven vurderer tilbakemeldingen.</p></div>
+  </div>
+</section>
+
+<!-- S4 -->
+<section id="s4" class="section-page">
+  <div class="section-num" style="color:var(--sky-dk)"><span class="en-only">Section 4</span><span class="no-only">Seksjon 4</span></div>
+  <h2 class="section-title en-only">When AI Is Permitted — The Three Obligations</h2>
+  <h2 class="section-title no-only">Når KI er tillatt — de tre forpliktelsene</h2>
+  <p class="en-only">When a task allows AI, three obligations apply. These are not optional extras — they are part of the task.</p>
+  <p class="no-only">Når en oppgave tillater KI, gjelder tre forpliktelser. Disse er ikke tillegg — de er en del av oppgaven.</p>
+
+  <div class="method-card m-lemon">
+    <div class="method-header"><div class="method-num">1</div><h4><span class="en-only">Verify</span><span class="no-only">Verifiser</span></h4></div>
+    <div class="method-body">
+      <p class="en-only">Every factual claim AI generates must be checked against a reliable source. AI can produce convincing, confidently stated information that is simply wrong.</p>
+      <p class="no-only">Alle faktapåstander KI genererer må sjekkes mot en pålitelig kilde. KI kan produsere overbevisende informasjon som er direkte feil.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th><span class="en-only">AI claim</span><span class="no-only">KI-påstand</span></th><th><span class="en-only">Source</span><span class="no-only">Kilde</span></th><th><span class="en-only">Result</span><span class="no-only">Resultat</span></th><th><span class="en-only">Action</span><span class="no-only">Tiltak</span></th></tr></thead>
+        <tbody>
+          <tr><td class="en-only" style="font-style:italic">"Norway's ski participation rate: 72%"</td><td class="en-only">SSB</td><td class="en-only"><span class="badge badge-rose">Wrong</span> SSB gives 48%</td><td class="en-only">Changed; cited SSB</td></tr>
+          <tr class="no-only"><td style="font-style:italic">«Norges skiandel: 72 %»</td><td>SSB</td><td><span class="badge badge-rose">Feil</span> SSB gir 48 %</td><td>Endret; siterte SSB</td></tr>
+          <tr><td class="en-only" style="font-style:italic">"Skiing dates back to 4000 BCE"</td><td class="en-only">Store Norske Leksikon</td><td class="en-only"><span class="badge badge-sage">Confirmed</span></td><td class="en-only">Kept; added source</td></tr>
+          <tr class="no-only"><td style="font-style:italic">«Langrenn fra 4000 f.Kr.»</td><td>Store Norske Leksikon</td><td><span class="badge badge-sage">Bekreftet</span></td><td>Beholdt; la til kilde</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="method-card m-rose">
+    <div class="method-header"><div class="method-num">2</div><h4><span class="en-only">Reject Consciously</span><span class="no-only">Forkast bevisst</span></h4></div>
+    <div class="method-body">
+      <p class="en-only">Record at least one thing AI produced that you decided not to use — and explain why. Rejection is the most intellectually rigorous part of working with AI.</p>
+      <p class="no-only">Noter minst én ting KI produserte som du valgte å ikke bruke — og forklar hvorfor. Forkastelse er den mest intellektuelt krevende delen av å jobbe med KI.</p>
+      <ul class="blist">
+        <li class="en-only">AI wrote: <em>"The sport builds character and resilience."</em> — Rejected. Too vague. My reader (a friend, 16) would find this annoying. Replaced with a specific moment.</li>
+        <li class="no-only">KI skrev: <em>«Sporten bygger karakter og motstandskraft.»</em> — Forkastet. For vagt. Min leser ville funnet dette irriterende.</li>
+        <li class="en-only">AI gave three statistics. — Rejected two after I could not verify them.</li>
+        <li class="no-only">KI ga tre statistikker. — Forkastet to etter at jeg ikke kunne bekrefte dem.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="method-card m-sage">
+    <div class="method-header"><div class="method-num">3</div><h4><span class="en-only">Accept Consciously</span><span class="no-only">Godta bevisst</span></h4></div>
+    <div class="method-body">
+      <p class="en-only">When you keep something AI produced, say why it was the right choice for your reader, purpose, and tone. <em>"It sounded good"</em> is not enough.</p>
+      <p class="no-only">Når du beholder noe KI produserte, si hvorfor det var riktig valg for din leser, ditt formål og din tone. <em>«Det hørtes bra ut»</em> er ikke nok.</p>
+      <ul class="blist">
+        <li class="en-only">Kept AI's opening: <em>"Nobody chooses cross-country skiing. It chooses you."</em> — Captures the paradox I wanted.</li>
+        <li class="no-only">Beholdt KI's åpning: <em>«Ingen velger langrenn. Det velger deg.»</em> — Fanger paradokset jeg ønsket.</li>
+        <li class="en-only">Kept 60% of paragraph 2 — the vocabulary was more precise than my own first draft.</li>
+        <li class="no-only">Beholdt 60 % av avsnitt 2 — ordforrådet var mer presist enn mitt eget første utkast.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- S5 -->
+<section id="s5" class="section-page">
+  <div class="section-num" style="color:var(--peach-dk)"><span class="en-only">Section 5</span><span class="no-only">Seksjon 5</span></div>
+  <h2 class="section-title en-only">Seven Ways to Document Your AI Use</h2>
+  <h2 class="section-title no-only">Syv måter å dokumentere KI-bruk på</h2>
+
+  <div class="method-card m-rose">
+    <div class="method-header"><div class="method-num">1</div><h4><span class="en-only">The Prompt Log</span><span class="no-only">Instruksjonsloggen</span></h4><span class="badge badge-rose" style="margin-left:auto">20–30 min</span></div>
+    <div class="method-body">
+      <p class="en-only">A table recording every prompt you wrote, what the AI produced, and what you decided to change — in order.</p>
+      <p class="no-only">En tabell som registrerer alle instruksjoner du skrev, hva KI produserte og hva du bestemte deg for å endre — i rekkefølge.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th><span class="en-only">Attempt</span><span class="no-only">Forsøk</span></th><th><span class="en-only">Prompt</span><span class="no-only">Instruksjon</span></th><th><span class="en-only">AI output</span><span class="no-only">KI-output</span></th><th><span class="en-only">Decision</span><span class="no-only">Beslutning</span></th></tr></thead>
+        <tbody>
+          <tr><td>v1</td><td class="en-only" style="font-style:italic">Write a diary entry about cross-country skiing.</td><td class="en-only">Generic, third-person voice. "One feels exhilarated…"</td><td class="en-only"><span class="badge badge-rose">Rejected</span> — too vague, wrong voice.</td></tr>
+          <tr class="no-only"><td>v1</td><td style="font-style:italic">Skriv et dagbokinnlegg om langrenn.</td><td>Generisk, tredjeperson. «Man føler seg opplivet…»</td><td><span class="badge badge-rose">Forkastet</span> — for vagt, feil stemme.</td></tr>
+          <tr><td>v2</td><td class="en-only" style="font-style:italic">200-word diary entry from a 17-year-old girl who hates cold. First person. Tone: honest, self-deprecating, slightly funny. Write a draft.</td><td class="en-only">Personal voice — but cheesy ending ("I found my passion!").</td><td class="en-only"><span class="badge badge-lemon">Edited</span> — rewrote final two sentences myself.</td></tr>
+          <tr class="no-only"><td>v2</td><td style="font-style:italic">200 ords dagbok fra 17-åring som hater kulde. Første person. Tone: ærlig, selvkritisk. Skriv et utkast.</td><td>Personlig stemme — men klisjeaktig slutt.</td><td><span class="badge badge-lemon">Redigert</span> — omskrev de to siste setningene selv.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="method-card m-lemon">
+    <div class="method-header"><div class="method-num">2</div><h4><span class="en-only">Colour-Coded Annotation</span><span class="no-only">Fargekodet annotering</span></h4><span class="badge badge-lemon" style="margin-left:auto">15–25 min</span></div>
+    <div class="method-body">
+      <p class="en-only">Highlight your final text to mark the origin of every sentence: yellow = AI as-is, green = AI edited, blue = yours, red = AI error corrected.</p>
+      <p class="no-only">Merk den endelige teksten din for å vise opprinnelsen til hver setning: gul = KI uendret, grønn = KI redigert, blå = din, rød = KI-feil korrigert.</p>
+      <div class="example ex-lemon">
+        <span style="background:#fff9c4;padding:1px 4px;border-radius:3px">"I set off at 7am. The trail was icy."</span> <span style="font-size:11px;color:var(--ink-light)">[🟡 AI — kept]</span>
+        &nbsp;<span style="background:var(--sky);padding:1px 4px;border-radius:3px;color:var(--sky-txt)">"I have skied this trail forty times."</span> <span style="font-size:11px;color:var(--ink-light)">[🔵 Mine]</span>
+        &nbsp;<span style="background:var(--sage);padding:1px 4px;border-radius:3px;color:var(--sage-txt)">"terrifying but kind of brilliant"</span> <span style="font-size:11px;color:var(--ink-light)">[🟢 AI edited]</span>
+        &nbsp;<span style="background:var(--rose);padding:1px 4px;border-radius:3px;color:var(--rose-txt);text-decoration:line-through">"I discovered a passion"</span> <span style="font-size:11px;color:var(--ink-light)">[🔴 Deleted cliché → "Maybe."]</span>
+        <cite class="en-only">Example of annotated skiing diary extract</cite>
+        <cite class="no-only">Eksempel på annotert skidagbokutdrag</cite>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card m-sage">
+    <div class="method-header"><div class="method-num">3</div><h4><span class="en-only">The Reflection Log</span><span class="no-only">Refleksjonsloggen</span></h4><span class="badge badge-sage" style="margin-left:auto">30–45 min</span></div>
+    <div class="method-body">
+      <p class="en-only">Written answers to four structured questions — <strong>entirely your own words, no AI</strong>. This is the most important step.</p>
+      <p class="no-only">Skriftlige svar på fire strukturerte spørsmål — <strong>helt dine egne ord, ingen KI</strong>. Dette er det viktigste steget.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th><span class="en-only">Question</span><span class="no-only">Spørsmål</span></th><th><span class="en-only">Strong answer includes…</span><span class="no-only">Et godt svar inkluderer…</span></th></tr></thead>
+        <tbody>
+          <tr><td class="en-only">Who is the intended reader?</td><td class="en-only">Age, background, attitude, prior knowledge. Not "a teenager" — more like "Mia, 16, who thinks skiing is for rich kids."</td></tr>
+          <tr class="no-only"><td>Hvem er den tiltenkte leseren?</td><td>Alder, bakgrunn, holdning, forkunnskaper. Ikke «en tenåring» — heller «Mia, 16, som synes skiing er for rike barn.»</td></tr>
+          <tr><td class="en-only">What does the text assume the reader believes?</td><td class="en-only">Specific assumptions named. Explains what would confuse a different reader.</td></tr>
+          <tr class="no-only"><td>Hva antar teksten at leseren tror?</td><td>Spesifikke antagelser nevnt. Forklarer hva som ville forvirre en annen leser.</td></tr>
+          <tr><td class="en-only">What persuasion does it use — and is it right for this reader?</td><td class="en-only">Identifies humour, statistics, emotion, personal stories — and explains whether they fit.</td></tr>
+          <tr class="no-only"><td>Hvilken overtalelse bruker den — og passer den for denne leseren?</td><td>Identifiserer humor, statistikk, følelser, personlige historier — og forklarer om de passer.</td></tr>
+          <tr><td class="en-only">Where does it succeed and where does it fall flat?</td><td class="en-only">Honest, specific. "AI used 'breathtaking scenery' which no 16-year-old would write to a friend."</td></tr>
+          <tr class="no-only"><td>Hvor lykkes den og hvor faller den igjennom?</td><td>Ærlig, spesifikk. «KI brukte 'magisk natur' som ingen 16-åring ville skrive til en venn.»</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="method-card m-sky">
+    <div class="method-header"><div class="method-num">4</div><h4><span class="en-only">Real-Time Margin Comments</span><span class="no-only">Margkommentarer i sanntid</span></h4><span class="badge badge-sky" style="margin-left:auto">20–30 min</span></div>
+    <div class="method-body">
+      <p class="en-only">Add comments in the margin of your Word or Google Doc, sentence by sentence, explaining what AI contributed and what you changed.</p>
+      <p class="no-only">Legg til kommentarer i margen av Word- eller Google-dokumentet ditt, setning for setning, og forklar hva KI bidro med og hva du endret.</p>
+      <ul class="blist">
+        <li><strong>AI — <span class="en-only">used exactly as written</span><span class="no-only">brukt nøyaktig slik skrevet</span></strong></li>
+        <li><strong>AI — <span class="en-only">edited: [change + reason]</span><span class="no-only">redigert: [endring + årsak]</span></strong></li>
+        <li><strong><span class="en-only">Mine — AI did not write this</span><span class="no-only">Min — KI skrev ikke dette</span></strong></li>
+        <li><strong>AI — <span class="en-only">deleted: [what was wrong]</span><span class="no-only">slettet: [hva som var galt]</span></strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="method-card m-lav">
+    <div class="method-header"><div class="method-num">5</div><h4><span class="en-only">Screen-Recorded Process Video</span><span class="no-only">Skjermopptaksvideo</span></h4><span class="badge badge-lav" style="margin-left:auto">30–50 min</span></div>
+    <div class="method-body">
+      <p class="en-only">Record 3–5 minutes of your screen while narrating your process. Show the AI conversation, identify generated sections, and explain what you changed and why.</p>
+      <p class="no-only">Ta opp 3–5 minutter av skjermen din mens du forteller om prosessen. Vis KI-samtalen, identifiser genererte seksjoner og forklar hva du endret og hvorfor.</p>
+      <ul class="checklist">
+        <li class="en-only">Show your prompts and why the first was too vague</li><li class="no-only">Vis instruksjonene dine og forklar hvorfor den første var for vag</li>
+        <li class="en-only">Show the AI output and what was wrong for your reader</li><li class="no-only">Vis KI-outputen og hva som var feil for din leser</li>
+        <li class="en-only">Show what you kept, changed, and deleted</li><li class="no-only">Vis hva du beholdt, endret og slettet</li>
+        <li class="en-only">Show final version alongside the AI draft</li><li class="no-only">Vis endelig versjon ved siden av KI-utkastet</li>
+        <li class="en-only">Reflect on what surprised you about the AI output</li><li class="no-only">Reflekter over hva som overrasket deg med KI-outputen</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="method-card m-peach">
+    <div class="method-header"><div class="method-num">6</div><h4><span class="en-only">Comparative Analysis Table</span><span class="no-only">Komparativ analysetabell</span></h4><span class="badge badge-peach" style="margin-left:auto">20 min</span></div>
+    <div class="method-body">
+      <p class="en-only">After completing all three texts, compare how writing changed across audiences — what AI got right, what it got wrong, and what you changed.</p>
+      <p class="no-only">Etter å ha fullført alle tre tekstene, sammenlign hvordan skrivingen endret seg for ulike lesere — hva KI fikk riktig, hva det fikk feil og hva du endret.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th><span class="en-only">Feature</span><span class="no-only">Trekk</span></th><th><span class="en-only">Text 1</span><span class="no-only">Tekst 1</span></th><th><span class="en-only">Text 2</span><span class="no-only">Tekst 2</span></th><th><span class="en-only">Text 3</span><span class="no-only">Tekst 3</span></th></tr></thead>
+        <tbody>
+          <tr><td class="en-only"><strong>Tone</strong></td><td class="en-only">Honest, personal</td><td class="en-only">Neutral, factual</td><td class="en-only">Casual, humorous</td></tr>
+          <tr class="no-only"><td><strong>Tone</strong></td><td>Ærlig, personlig</td><td>Nøytral, faktabasert</td><td>Uformell, humoristisk</td></tr>
+          <tr><td class="en-only"><strong>AI got right</strong></td><td class="en-only">Personal voice</td><td class="en-only">Structure</td><td class="en-only">Casual opener</td></tr>
+          <tr class="no-only"><td><strong>KI fikk riktig</strong></td><td>Personlig stemme</td><td>Struktur</td><td>Uformell åpning</td></tr>
+          <tr><td class="en-only"><strong>AI got wrong</strong></td><td class="en-only">Ending too positive</td><td class="en-only">No local details</td><td class="en-only">Too polished</td></tr>
+          <tr class="no-only"><td><strong>KI fikk feil</strong></td><td>Slutten for positiv</td><td>Ingen lokale detaljer</td><td>For polert</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="method-card m-grey">
+    <div class="method-header"><div class="method-num">7</div><h4><span class="en-only">Version History — Google Docs / Word</span><span class="no-only">Versjonshistorikk — Google Dokumenter / Word</span></h4><span class="badge badge-grey" style="margin-left:auto"><span class="en-only">With limitations</span><span class="no-only">Med begrensninger</span></span></div>
+    <div class="method-body">
+      <p class="en-only">Both Google Docs and Microsoft Word allow teachers to view a document's full revision history, showing every saved version over time. This method exists and can be useful — but it has significant limitations worth understanding before relying on it.</p>
+      <p class="no-only">Både Google Dokumenter og Microsoft Word lar lærere se et dokuments fullstendige revisjonshistorikk. Denne metoden finnes og kan være nyttig — men den har betydelige begrensninger det er verdt å kjenne til.</p>
+      <div class="callout callout-sage">
+        <strong class="en-only">When it works well</strong>
+        <strong class="no-only">Når det fungerer godt</strong>
+        <span class="en-only">Version history gives a genuine picture of a student's writing process when the student writes in one continuous document from the start, edits gradually over time, and uses an account tied to their identity.</span>
+        <span class="no-only">Versjonshistorikk gir et genuint bilde av elevens skriveprosess når eleven skriver i ett kontinuerlig dokument fra starten, gjør endringer gradvis over tid og bruker en konto knyttet til identiteten deres.</span>
+      </div>
+      <div class="callout callout-rose">
+        <strong class="en-only">Why it is not foolproof</strong>
+        <strong class="no-only">Hvorfor det ikke er idiotsikkert</strong>
+        <span class="en-only">Version history records keystrokes and saves — not thinking. Students can easily defeat it:</span>
+        <span class="no-only">Versjonshistorikk registrerer tastetrykk og lagringer — ikke tenkning. Elever kan lett omgå det:</span>
+        <ul class="blist" style="margin-top:.6rem">
+          <li class="en-only"><strong>Paste in AI-generated text</strong> — one paste entry looks identical to fast typing.</li>
+          <li class="no-only"><strong>Lime inn KI-generert tekst</strong> — én limingoppføring ser identisk ut som rask skriving.</li>
+          <li class="en-only"><strong>Reset history by copying to a new document</strong> — deletes all evidence.</li>
+          <li class="no-only"><strong>Tilbakestille historikk ved å kopiere til nytt dokument</strong> — sletter alle spor.</li>
+          <li class="en-only"><strong>Write offline and paste later</strong> — no trace of where text came from.</li>
+          <li class="no-only"><strong>Skrive offline og lime inn senere</strong> — ingen spor av hvor teksten kom fra.</li>
+          <li class="en-only"><strong>Submit in large chunks</strong> — makes it hard to see a real drafting process.</li>
+          <li class="no-only"><strong>Levere i store blokker</strong> — gjør det vanskelig å se en ekte skriveprosess.</li>
+        </ul>
+      </div>
+      <div class="callout callout-lemon">
+        <strong class="en-only">Teacher's note</strong>
+        <strong class="no-only">Lærers merknad</strong>
+        <span class="en-only">Version history is a useful background check, not a primary documentation method. If a document appears fully formed in a single paste with no revision history, that is worth a conversation. But it shows <em>what</em> happened, not <em>why</em>. Use it as a supplement, not a substitute for the prompt log or reflection.</span>
+        <span class="no-only">Versjonshistorikk er en nyttig bakgrunnssjekk, ikke en primær dokumentasjonsmetode. Hvis et dokument ser ut til å ha dukket opp ferdig i én liming, er det verdt en samtale. Men den viser <em>hva</em> som skjedde, ikke <em>hvorfor</em>. Bruk den som et supplement, ikke en erstatning for instruksjonsloggen eller refleksjonen.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S6 -->
+<section id="s6" class="section-page">
+  <div class="section-num" style="color:var(--lemon-dk)"><span class="en-only">Section 6</span><span class="no-only">Seksjon 6</span></div>
+  <h2 class="section-title en-only">What Makes a Strong Prompt</h2>
+  <h2 class="section-title no-only">Hva gjør en instruksjon god</h2>
+  <p class="en-only">The quality of what AI produces depends almost entirely on the quality of what you ask. A weak prompt produces generic text that teaches you nothing. A strong prompt forces you to think about your reader before AI even starts.</p>
+  <p class="no-only">Kvaliteten på det KI produserer avhenger nesten helt av kvaliteten på det du spør om. En svak instruksjon produserer generisk tekst som ikke lærer deg noe. En god instruksjon tvinger deg til å tenke på leseren din før KI i det hele tatt begynner.</p>
+  <div class="compare">
+    <div class="compare-box compare-bad">
+      <h5>❌ <span class="en-only">Weak</span><span class="no-only">Svak</span></h5>
+      <p class="en-only">"Write a text about cross-country skiing which would be a letter to a friend."</p>
+      <p class="no-only">«Skriv en tekst om langrenn som ville vært et brev til en venn.»</p>
+      <div class="reason en-only">No specific friend. No purpose. No reader attitude. No constraints.</div>
+      <div class="reason no-only">Ingen spesifikk venn. Intet formål. Ingen leserholdning. Ingen begrensninger.</div>
+    </div>
+    <div class="compare-box compare-good">
+      <h5>✅ <span class="en-only">Strong</span><span class="no-only">God</span></h5>
+      <p class="en-only">"I am writing to my friend Lucas, 16, who thinks winter sport is boring. I want to convince him to join my school trip to Nordmarka. Tone: casual, honest. Length: 200 words. First person. Write a draft, not a finished product."</p>
+      <p class="no-only">«Jeg skriver til vennen min Lucas, 16, som synes vintersport er kjedelig. Jeg vil overbevise ham om å bli med på skoleturen til Nordmarka. Tone: uformell, ærlig. Lengde: 200 ord. Første person. Skriv et utkast, ikke et ferdig produkt.»</p>
+      <div class="reason en-only">Specific person, clear purpose, reader attitude named, constraints set.</div>
+      <div class="reason no-only">Spesifikk person, klart formål, leserholdning nevnt, begrensninger satt.</div>
+    </div>
+  </div>
+  <h3 class="en-only">Prompt Checklist</h3>
+  <h3 class="no-only">Sjekkliste for instruksjoner</h3>
+  <ul class="checklist">
+    <li class="en-only">A named, specific reader with age and attitude</li><li class="no-only">En navngitt, spesifikk leser med alder og holdning</li>
+    <li class="en-only">A clear purpose — what you want the reader to feel or do</li><li class="no-only">Et klart formål — hva du vil at leseren skal føle eller gjøre</li>
+    <li class="en-only">Tone instruction — casual, formal, self-deprecating, etc.</li><li class="no-only">Instruksjon om tone — uformell, formell, selvkritisk osv.</li>
+    <li class="en-only">Length or format constraint</li><li class="no-only">Lengde- eller formatbegrensning</li>
+    <li class="en-only">Ask for a draft, not a final product</li><li class="no-only">Be om et utkast, ikke et ferdig produkt</li>
+  </ul>
+</section>
+
+<!-- S7 -->
+<section id="s7" class="section-page">
+  <div class="section-num" style="color:var(--sage-dk)"><span class="en-only">Section 7</span><span class="no-only">Seksjon 7</span></div>
+  <h2 class="section-title en-only">Quick Talk — The One-Minute Oral Check</h2>
+  <h2 class="section-title no-only">Rask muntlig sjekk — ett minutt</h2>
+  <p class="en-only">After a student submits writing, the teacher asks them to explain it — out loud, without notes — in about one minute. No preparation. No warning. This is one of the most powerful tools available.</p>
+  <p class="no-only">Etter at en elev har levert en tekst, ber læreren dem forklare den — høyt, uten notater — på omtrent ett minutt. Ingen forberedelse. Ingen forvarsel. Dette er et av de kraftigste verktøyene som er tilgjengelige.</p>
+  <div class="big-quote" style="background:var(--sage)">
+    <p class="en-only" style="color:var(--sage-txt)">"Submitting work you cannot explain is not learning. It is outsourcing."</p>
+    <p class="no-only" style="color:var(--sage-txt)">«Å levere arbeid du ikke kan forklare er ikke læring. Det er outsourcing.»</p>
+  </div>
+  <h3 class="en-only">How to Run Quick Talk</h3>
+  <h3 class="no-only">Slik gjennomfører du rask muntlig sjekk</h3>
+  <ol class="steps">
+    <li class="en-only">Pick up any student work — random selection is better for trust than targeting suspicious submissions.</li>
+    <li class="no-only">Ta opp et elevarbeid — tilfeldig utvalg er bedre for tillit enn å målrette mot mistenkelige innleveringer.</li>
+    <li class="en-only">Point to any paragraph and say: <em>"Tell me what you were trying to do here."</em></li>
+    <li class="no-only">Pek på et avsnitt og si: <em>«Fortell meg hva du prøvde å gjøre her.»</em></li>
+    <li class="en-only">Listen for specificity — can they name the audience? Explain their word choice? Describe the argument?</li>
+    <li class="no-only">Lytt etter spesifisitet — kan de nevne målgruppen? Forklare ordvalget? Beskrive argumentet?</li>
+    <li class="en-only">If they struggle, ask follow-up: <em>"What does [specific word] mean to you?"</em></li>
+    <li class="no-only">Hvis de sliter, still oppfølgingsspørsmål: <em>«Hva betyr [spesifikt ord] for deg?»</em></li>
+    <li class="en-only">Keep it conversational — this is not an interrogation.</li>
+    <li class="no-only">Hold det samtalepreget — dette er ikke et forhør.</li>
+  </ol>
+  <h3 class="en-only">Question Bank</h3>
+  <h3 class="no-only">Spørsmålsbank</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th><span class="en-only">For any text</span><span class="no-only">For alle tekster</span></th><th><span class="en-only">For AI-assisted work specifically</span><span class="no-only">For KI-assistert arbeid</span></th></tr></thead>
+    <tbody>
+      <tr><td class="en-only">"Tell me what this paragraph is doing in your own words."</td><td class="en-only">"Which part did you write yourself? Can you point to it?"</td></tr>
+      <tr class="no-only"><td>«Fortell meg hva dette avsnittet gjør med egne ord.»</td><td>«Hvilken del skrev du selv? Kan du peke på det?»</td></tr>
+      <tr><td class="en-only">"Who were you writing for and what did you assume they knew?"</td><td class="en-only">"What did the AI get wrong that you had to fix?"</td></tr>
+      <tr class="no-only"><td>«Hvem skrev du for og hva antok du at de visste?»</td><td>«Hva fikk KI feil som du måtte fikse?»</td></tr>
+      <tr><td class="en-only">"What is the strongest sentence here? Read it aloud."</td><td class="en-only">"If I asked you to rewrite this section without AI right now, could you?"</td></tr>
+      <tr class="no-only"><td>«Hva er den sterkeste setningen her? Les den høyt.»</td><td>«Hvis jeg ba deg omskrive denne delen uten KI nå, ville du klart det?»</td></tr>
+      <tr><td class="en-only">"If you could change one thing now, what would it be?"</td><td class="en-only">"Did you verify any facts here? How?"</td></tr>
+      <tr class="no-only"><td>«Hvis du kunne endre én ting nå, hva ville det vært?»</td><td>«Verifiserte du noen fakta her? Hvordan?»</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout callout-sage">
+    <strong class="en-only">Important:</strong><strong class="no-only">Viktig:</strong>
+    <span class="en-only">Quick Talk is not a punishment. Run it on strong work too. When a student explains their process confidently, name it out loud in front of the class: <em>"That is what good editorial thinking looks like."</em></span>
+    <span class="no-only">Rask muntlig sjekk er ikke en straff. Bruk det også på godt arbeid. Når en elev forklarer prosessen sin med selvtillit, si det høyt foran klassen: <em>«Det er slik god redaksjonell tenkning ser ut.»</em></span>
+  </div>
+</section>
+
+<!-- S8 -->
+<section id="s8" class="section-page">
+  <div class="section-num" style="color:var(--lav-dk)"><span class="en-only">Section 8</span><span class="no-only">Seksjon 8</span></div>
+  <h2 class="section-title en-only">The AI-Generated Quiz — Eight Questions on Your Own Work</h2>
+  <h2 class="section-title no-only">KI-generert quiz — åtte spørsmål om ditt eget arbeid</h2>
+  <p class="en-only">After a student submits writing, the teacher pastes the text into an AI tool and generates eight multiple-choice questions. Students who submit AI-generated work without reading it very often <strong>cannot answer basic questions about what they submitted</strong>. The quiz makes this visible, fast, and fairly.</p>
+  <p class="no-only">Etter innlevering limer læreren teksten inn i et KI-verktøy og genererer åtte flervalgsoppgaver. Elever som leverer KI-generert arbeid uten å ha lest det, <strong>kan svært ofte ikke svare på grunnleggende spørsmål om det de leverte</strong>. Quizen gjør dette synlig, raskt og rettferdig.</p>
+  <h3 class="en-only">The Prompt — Copy and Use Directly</h3>
+  <h3 class="no-only">Instruksjonen — kopier og bruk direkte</h3>
+  <div class="prompt-label en-only">Paste into Claude, ChatGPT, or similar — then paste the student's text below it:</div>
+  <div class="prompt-label no-only">Lim inn i Claude, ChatGPT eller lignende — lim deretter inn elevens tekst under:</div>
+  <div class="prompt-block en-only">Here is a student essay. Generate exactly 8 multiple choice questions that test whether the reader understood the text. Each question should have 4 options (A, B, C, D). Include questions about: the main argument, specific vocabulary used, the intended audience, the purpose of specific paragraphs, one factual claim made in the text, and the tone or register. Do not make the questions trivially easy. Provide the answer key at the end.
+
+[PASTE STUDENT TEXT HERE]</div>
+  <div class="prompt-block no-only">Her er et elevessay. Generer nøyaktig 8 flervalgsoppgaver som tester om leseren forsto teksten. Hvert spørsmål skal ha 4 alternativer (A, B, C, D). Inkluder spørsmål om: hovedargumentet, spesifikt ordforråd, den tiltenkte målgruppen, formålet med spesifikke avsnitt, én faktapåstand i teksten og tonen eller registeret. Ikke gjør spørsmålene trivielt enkle. Gi fasitsvaret til slutt.
+
+[LIM INN ELEVTEKST HER]</div>
+  <h3 class="en-only">How to Use the Quiz</h3>
+  <h3 class="no-only">Slik bruker du quizen</h3>
+  <ol class="steps">
+    <li class="en-only">Hand the student the quiz cold — no preparation, no notes, no warning.</li>
+    <li class="no-only">Gi eleven quizen uten forvarsel — ingen forberedelse, ingen notater.</li>
+    <li class="en-only">Give 5 minutes to answer all 8 questions.</li>
+    <li class="no-only">Gi 5 minutter til å svare på alle 8 spørsmål.</li>
+    <li class="en-only">Score together: 7–8 correct = strong ownership. 5–6 = some gaps. Below 5 = worth a conversation.</li>
+    <li class="no-only">Rett det sammen: 7–8 riktige = sterk forståelse. 5–6 = noen hull. Under 5 = verdt en samtale.</li>
+    <li class="en-only">Use wrong answers as a starting point: <em>"You got Q3 wrong — who did you have in mind when writing this?"</em></li>
+    <li class="no-only">Bruk feil svar som utgangspunkt: <em>«Du svarte feil på S3 — hvem hadde du i tankene da du skrev dette?»</em></li>
+    <li class="en-only">Students who documented their process well almost always perform well. The quiz rewards the process.</li>
+    <li class="no-only">Elever som dokumenterte prosessen sin godt presterer nesten alltid godt. Quizen belønner prosessen.</li>
+  </ol>
+  <div class="callout callout-lav">
+    <strong class="en-only">Student self-check option:</strong><strong class="no-only">Elevens selvsjekk:</strong>
+    <span class="en-only">Before submitting, students can run this quiz on their own work. If they cannot answer 6 of 8 questions confidently, they need to revisit the text. This builds metacognitive habit — the ability to know what you know.</span>
+    <span class="no-only">Før innlevering kan elever kjøre denne quizen på sitt eget arbeid. Hvis de ikke kan svare trygt på 6 av 8 spørsmål, må de gjennomgå teksten på nytt. Dette bygger metakognitiv vane — evnen til å vite hva man kan.</span>
+  </div>
+</section>
+
+<!-- S9: PETRA -->
+<section id="s9" class="section-page">
+  <div class="section-num" style="color:var(--rose-dk)"><span class="en-only">Section 9</span><span class="no-only">Seksjon 9</span></div>
+  <h2 class="section-title en-only">PETRA AI — Permissive and Transparent Use</h2>
+  <h2 class="section-title no-only">PETRA KI — Tillattende og transparent bruk</h2>
+  <p class="en-only">For English 2, students use <strong>PETRA AI</strong>, a platform built specifically for schools. PETRA stands for <strong>Permissive and Transparent use of Generative AI</strong>. Rather than banning AI, it asks students to tick a series of boxes explaining exactly how AI was used.</p>
+  <p class="no-only">For English 2 bruker elever <strong>PETRA KI</strong>, en plattform bygget spesielt for skoler. PETRA står for <strong>Permissive and Transparent use of Generative AI</strong>. I stedet for å forby KI ber den elever om å krysse av i en rekke bokser som forklarer nøyaktig hvordan KI ble brukt.</p>
+  <p class="en-only">🔗 <a href="https://www.petraai.org/" target="_blank" style="color:var(--rose-dk);font-weight:500">PETRA AI: Permissive and Transparent use of GenAI — petraai.org</a></p>
+  <p class="no-only">🔗 <a href="https://www.petraai.org/" target="_blank" style="color:var(--rose-dk);font-weight:500">PETRA AI: Permissive and Transparent use of GenAI — petraai.org</a></p>
+  <h3 class="en-only">What PETRA Records</h3>
+  <h3 class="no-only">Hva PETRA registrerer</h3>
+  <div class="cards">
+    <div class="card card-rose"><h5 class="en-only">Idea generation</h5><h5 class="no-only">Idégenerering</h5><p class="en-only">Did you use AI to generate ideas or an outline?</p><p class="no-only">Brukte du KI til å generere ideer eller en disposisjon?</p></div>
+    <div class="card card-lemon"><h5 class="en-only">Drafting</h5><h5 class="no-only">Utkast</h5><p class="en-only">Did you use AI to draft text?</p><p class="no-only">Brukte du KI til å skrive utkast?</p></div>
+    <div class="card card-sage"><h5 class="en-only">Editing</h5><h5 class="no-only">Redigering</h5><p class="en-only">Did you use AI to edit or improve existing text?</p><p class="no-only">Brukte du KI til å redigere eller forbedre eksisterende tekst?</p></div>
+    <div class="card card-sky"><h5 class="en-only">Checking</h5><h5 class="no-only">Sjekking</h5><p class="en-only">Did you use AI to check grammar or spelling?</p><p class="no-only">Brukte du KI til å sjekke grammatikk eller stavemåte?</p></div>
+    <div class="card card-lav"><h5 class="en-only">Translation</h5><h5 class="no-only">Oversettelse</h5><p class="en-only">Did you translate anything using AI?</p><p class="no-only">Oversatte du noe ved hjelp av KI?</p></div>
+  </div>
+  <div class="callout callout-rose">
+    <strong class="en-only">Why this matters:</strong><strong class="no-only">Hvorfor dette er viktig:</strong>
+    <span class="en-only">Ticking every applicable box is not a penalty — it is evidence of honest engagement. Your teacher reads these declarations not to punish you, but to understand your process and give better feedback. Transparency is modelled, not just demanded.</span>
+    <span class="no-only">Å krysse av alle aktuelle bokser er ikke en straff — det er bevis på ærlig engasjement. Læreren din leser disse erklæringene ikke for å straffe deg, men for å forstå prosessen din og gi bedre tilbakemelding. Åpenhet modelleres, ikke bare kreves.</span>
+  </div>
+  <div class="big-quote" style="background:var(--rose);margin-top:2rem">
+    <p class="en-only" style="color:var(--rose-txt)">"AI is the first draft. You are the author."</p>
+    <p class="no-only" style="color:var(--rose-txt)">«KI er det første utkastet. Du er forfatteren.»</p>
+  </div>
+</section>
+
+<!-- S10 -->
+<section id="s10" class="section-page">
+  <div class="section-num" style="color:var(--peach-dk)"><span class="en-only">Section 10</span><span class="no-only">Seksjon 10</span></div>
+  <h2 class="section-title en-only">Assessment — What Your Teacher Reads</h2>
+  <h2 class="section-title no-only">Vurdering — hva læreren ser etter</h2>
+  <p class="en-only">This assignment is not graded on how good the AI output is. It is graded on your process, your reflection, and your editorial decisions.</p>
+  <p class="no-only">Denne oppgaven vurderes ikke etter hvor god KI-outputen er. Den vurderes etter prosessen din, refleksjonen din og dine redaksjonelle beslutninger.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th><span class="en-only">Component</span><span class="no-only">Komponent</span></th><th><span class="en-only">Excellent</span><span class="no-only">Utmerket</span></th><th><span class="en-only">Adequate</span><span class="no-only">Tilstrekkelig</span></th><th><span class="en-only">Insufficient</span><span class="no-only">Utilstrekkelig</span></th></tr></thead>
+    <tbody>
+      <tr><td><strong class="en-only">Prompt quality</strong><strong class="no-only">Instruksjonskvalitet</strong></td><td><span class="badge badge-sage">✓</span> <span class="en-only">Specific reader, purpose, constraints, clear iteration.</span><span class="no-only">Spesifikk leser, formål, begrensninger, klar iterasjon.</span></td><td><span class="badge badge-lemon">~</span> <span class="en-only">Some specificity. One improved version.</span><span class="no-only">Noe spesifisitet. Én forbedret versjon.</span></td><td><span class="badge badge-rose">✗</span> <span class="en-only">One-liners. No iteration.</span><span class="no-only">Enkle linjer. Ingen iterasjon.</span></td></tr>
+      <tr><td><strong class="en-only">Reflection quality</strong><strong class="no-only">Refleksjonskvalitet</strong></td><td><span class="badge badge-sage">✓</span> <span class="en-only">Deep, specific, identifies exact phrases AI got wrong.</span><span class="no-only">Dyp, spesifikk, identifiserer nøyaktige fraser KI fikk feil.</span></td><td><span class="badge badge-lemon">~</span> <span class="en-only">Some specific examples.</span><span class="no-only">Noen spesifikke eksempler.</span></td><td><span class="badge badge-rose">✗</span> <span class="en-only">Vague. "The AI was pretty good."</span><span class="no-only">Vagt. «KI var ganske bra.»</span></td></tr>
+      <tr><td><strong class="en-only">Audience awareness</strong><strong class="no-only">Leserbevissthet</strong></td><td><span class="badge badge-sage">✓</span> <span class="en-only">Shows how register, tone, vocabulary change per reader.</span><span class="no-only">Viser hvordan register, tone, ordforråd endres per leser.</span></td><td><span class="badge badge-lemon">~</span> <span class="en-only">Notes some differences.</span><span class="no-only">Merker noen forskjeller.</span></td><td><span class="badge badge-rose">✗</span> <span class="en-only">All three texts feel similar.</span><span class="no-only">Alle tre tekstene føles like.</span></td></tr>
+      <tr><td><strong class="en-only">Own writing</strong><strong class="no-only">Eget arbeid</strong></td><td><span class="badge badge-sage">✓</span> <span class="en-only">Clear personal voice. Details AI could not know.</span><span class="no-only">Klar personlig stemme. Detaljer KI ikke kunne vite.</span></td><td><span class="badge badge-lemon">~</span> <span class="en-only">Some personal additions.</span><span class="no-only">Noen personlige tillegg.</span></td><td><span class="badge badge-rose">✗</span> <span class="en-only">AI text used with no meaningful changes.</span><span class="no-only">KI-tekst brukt uten meningsfulle endringer.</span></td></tr>
+    </tbody>
+  </table></div>
+  <h3 class="en-only">Submission Checklist</h3>
+  <h3 class="no-only">Innleveringssjekkliste</h3>
+  <ul class="checklist">
+    <li class="en-only">Topic chosen and explained</li><li class="no-only">Tema valgt og forklart</li>
+    <li class="en-only">Three writing types selected from the list</li><li class="no-only">Tre skrivetyper valgt fra listen</li>
+    <li class="en-only">Prompt v1 included for each text (even if it was weak)</li><li class="no-only">Instruksjon v1 inkludert for hver tekst (selv om den var svak)</li>
+    <li class="en-only">Prompt v2 or v3 with explanation of what changed</li><li class="no-only">Instruksjon v2 eller v3 med forklaring av hva som endret seg</li>
+    <li class="en-only">Final AI text included for all three writing types</li><li class="no-only">Endelig KI-tekst inkludert for alle tre skrivetyper</li>
+    <li class="en-only">One text fully annotated</li><li class="no-only">Én tekst fullstendig annotert</li>
+    <li class="en-only">Reflection log completed (your own words only)</li><li class="no-only">Refleksjonslogg fullført (kun dine egne ord)</li>
+    <li class="en-only">PETRA AI declaration submitted (English 2 only)</li><li class="no-only">PETRA KI-erklæring levert (kun English 2)</li>
+  </ul>
+</section>
+
+<!-- S11 -->
+<section id="s11" class="section-page">
+  <div class="section-num" style="color:var(--sky-dk)"><span class="en-only">Section 11</span><span class="no-only">Seksjon 11</span></div>
+  <h2 class="section-title en-only">Model Examples</h2>
+  <h2 class="section-title no-only">Eksempler på elevarbeid</h2>
+  <p class="en-only">The following show different quality levels of student work. Names are fictional.</p>
+  <p class="no-only">Følgende viser ulike kvalitetsnivåer på elevarbeid. Navn er fiktive.</p>
+
+  <h3 class="en-only">Example A — Strong Prompt Log</h3>
+  <h3 class="no-only">Eksempel A — God instruksjonslogg</h3>
+  <div class="callout callout-lav"><strong class="en-only">Student: Sofia, 17. Topic: Anxiety in teenagers. Tool: Gemini.</strong><strong class="no-only">Elev: Sofia, 17. Tema: Angst blant tenåringer. Verktøy: Gemini.</strong></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th><span class="en-only">Version</span><span class="no-only">Versjon</span></th><th><span class="en-only">Prompt</span><span class="no-only">Instruksjon</span></th><th><span class="en-only">AI output</span><span class="no-only">KI-output</span></th><th><span class="en-only">Decision</span><span class="no-only">Beslutning</span></th></tr></thead>
+    <tbody>
+      <tr><td>v1</td><td class="en-only" style="font-style:italic">"Write a diary entry about anxiety for a teenager."</td><td class="en-only">Third-person, clinical. "I am experiencing elevated cortisol responses." Nobody writes this in a diary.</td><td class="en-only"><span class="badge badge-rose">Rejected</span> — completely wrong voice.</td></tr>
+      <tr class="no-only"><td>v1</td><td style="font-style:italic">«Skriv et dagbokinnlegg om angst for en tenåring.»</td><td>Tredjeperson, klinisk. «Jeg opplever forhøyede kortisolnivåer.»</td><td><span class="badge badge-rose">Forkastet</span> — helt feil stemme.</td></tr>
+      <tr><td>v2</td><td class="en-only" style="font-style:italic">"250-word diary from a 17-year-old with exam anxiety. Late at night. Tired, honest, a little dark. Short sentences when stressed. Does NOT use the word 'anxiety'. First person, present tense."</td><td class="en-only">Better — personal voice. But used "my heart was racing" (cliché).</td><td class="en-only"><span class="badge badge-lemon">Edited</span> — changed to "my chest felt like a fist was in it".</td></tr>
+      <tr class="no-only"><td>v2</td><td style="font-style:italic">«250 ord dagbok fra 17-åring med eksamensangst. Sent om kvelden. Trett, ærlig, litt mørkt. Korte setninger under stress. Bruker IKKE ordet 'angst'. Første person, presens.»</td><td>Bedre — personlig stemme. Men brukte klisjé: «hjertet mitt hamret».</td><td><span class="badge badge-lemon">Redigert</span> — endret til «brystet mitt føltes som en knyttneve inni».</td></tr>
+    </tbody>
+  </table></div>
+  <div class="example ex-lav">
+    <span class="en-only">"Three maths problems left. <span style="font-size:11px;color:var(--ink-light)">[AI — kept]</span> It is 11pm. <span style="font-size:11px;color:var(--ink-light)">[AI — kept]</span> My chest felt like a fist was in it. <span style="font-size:11px;color:var(--lav-txt)">[Mine — rewrote AI cliché]</span> I should sleep. <span style="font-size:11px;color:var(--ink-light)">[AI — kept]</span> I won't. <span style="font-size:11px;color:var(--lav-txt)">[Mine]</span>"</span>
+    <span class="no-only">«Tre matteoppgaver igjen. <span style="font-size:11px;color:var(--ink-light)">[KI — beholdt]</span> Klokken er 23. <span style="font-size:11px;color:var(--ink-light)">[KI — beholdt]</span> Brystet mitt føltes som en knyttneve inni det. <span style="font-size:11px;color:var(--lav-txt)">[Min — omskrev KI-klisjé]</span> Jeg burde sove. <span style="font-size:11px;color:var(--ink-light)">[KI — beholdt]</span> Det gjør jeg ikke. <span style="font-size:11px;color:var(--lav-txt)">[Min]</span>»</span>
+    <cite class="en-only">Colour annotation showing AI vs student-authored sentences</cite>
+    <cite class="no-only">Fargeannoteringer som viser KI-genererte vs elevskrevne setninger</cite>
+  </div>
+
+  <h3 class="en-only">Example B — Strong Reflection</h3>
+  <h3 class="no-only">Eksempel B — God refleksjon</h3>
+  <div class="callout callout-lav"><strong class="en-only">Student: Jakob, 18. Annotating AI-generated opinion column. Topic: Climate Change.</strong><strong class="no-only">Elev: Jakob, 18. Annoterer KI-generert meningsartikkel. Tema: Klimaendringer.</strong></div>
+  <div class="accordion">
+    <div class="accordion-item">
+      <button class="accordion-btn" onclick="toggleAcc(this)"><span class="en-only">Q1 — Who is the intended reader?</span><span class="no-only">S1 — Hvem er den tiltenkte leseren?</span> <span class="arrow">▶</span></button>
+      <div class="accordion-content">
+        <div class="example ex-sky en-only">"The intended reader is a 50-year-old who reads the newspaper on Sunday mornings and thinks climate change is real but vaguely depressing and not really their problem. The AI understood this — it used financial language ('investment', 'return') rather than emotional language. That was actually smart. I kept that."</div>
+        <div class="example ex-sky no-only">«Den tiltenkte leseren er en 50-åring som leser avisen på søndagsmorgener og synes klimaendringer er virkelige, men vagt nedslående og ikke egentlig deres problem. KI forsto dette — den brukte finansspråk ('investering', 'avkastning') snarere enn følelsesladet språk. Det var faktisk smart. Jeg beholdt det.»</div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-btn" onclick="toggleAcc(this)"><span class="en-only">Q4 — Where does it succeed and fall flat?</span><span class="no-only">S4 — Hvor lykkes den og hvor faller den igjennom?</span> <span class="arrow">▶</span></button>
+      <div class="accordion-content">
+        <div class="example ex-sky en-only">"It succeeded in structure. It failed in specificity — it wrote 'many experts agree' with no sources. My reader is educated — they would notice and lose trust immediately. I changed both to reference actual IPCC data (which I found myself — AI had the wrong year). I also cut the final sentence because it ended with 'The future is in our hands' — my reader would roll their eyes."</div>
+        <div class="example ex-sky no-only">«Den lyktes med struktur. Den mislyktes med spesifisitet — den skrev 'mange eksperter er enige' uten kilder. Min leser er utdannet — de ville lagt merke til dette og mistet tilliten umiddelbart. Jeg endret begge til å referere til faktiske IPCC-data (som jeg fant selv — KI hadde feil år). Jeg kuttet også den siste setningen fordi den endte med 'Fremtiden er i våre hender' — min leser ville rullet med øynene.»</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="en-only">Example C — What a Weak Submission Looks Like</h3>
+  <h3 class="no-only">Eksempel C — Hva en svak innlevering ser ut som</h3>
+  <div class="callout callout-rose">
+    <strong class="en-only">What was submitted:</strong><strong class="no-only">Hva som ble levert:</strong>
+    <span class="en-only"> Prompt v1: "Write a text message conversation about football." What I noticed: It was good. Prompt v2: "Make it better." Reflection: AI did a great job. I changed a few words.</span>
+    <span class="no-only"> Instruksjon v1: «Skriv en tekstmeldingssamtale om fotball.» Hva jeg la merke til: Det var bra. Instruksjon v2: «Gjør det bedre.» Refleksjon: KI gjorde en god jobb. Jeg endret noen ord.</span>
+  </div>
+  <ul class="blist">
+    <li class="en-only">"It was good" tells the teacher nothing about the reader, purpose, or text</li><li class="no-only">«Det var bra» forteller læreren ingenting om leseren, formålet eller teksten</li>
+    <li class="en-only">"Make it better" shows no understanding of what was wrong</li><li class="no-only">«Gjør det bedre» viser ingen forståelse av hva som var galt</li>
+    <li class="en-only">"A few words" without saying which or why shows nothing about editorial thinking</li><li class="no-only">«Noen ord» uten å si hvilke eller hvorfor viser ingenting om redaksjonell tenkning</li>
+  </ul>
+</section>
+
+<!-- QUICK REFERENCE -->
+<section class="section-page">
+  <h2 class="section-title en-only">Quick Reference — Complete Overview</h2>
+  <h2 class="section-title no-only">Hurtigreferanse — fullstendig oversikt</h2>
+
+  <h3 class="en-only">Documentation Methods — Student-facing, during or after writing</h3>
+  <h3 class="no-only">Dokumentasjonsmetoder — elevrettet, under eller etter skriving</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th><span class="en-only">Method</span><span class="no-only">Metode</span></th><th><span class="en-only">Best for</span><span class="no-only">Best for</span></th><th><span class="en-only">Who</span><span class="no-only">Hvem</span></th><th><span class="en-only">Time</span><span class="no-only">Tid</span></th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge badge-rose">1. <span class="en-only">Prompt Log</span><span class="no-only">Instruksjonslogg</span></span></td><td class="en-only">Showing iteration and improvement across prompt versions</td><td class="no-only">Vise iterasjon og forbedring</td><td class="en-only">Student</td><td class="no-only">Elev</td><td>20–30 min</td></tr>
+      <tr><td><span class="badge badge-lemon">2. <span class="en-only">Colour Annotation</span><span class="no-only">Fargeannoteringer</span></span></td><td class="en-only">Visual sentence-by-sentence evidence of AI vs own contribution</td><td class="no-only">Visuelt bevis på bidrag setning for setning</td><td class="en-only">Student</td><td class="no-only">Elev</td><td>15–25 min</td></tr>
+      <tr><td><span class="badge badge-sage">3. <span class="en-only">Reflection Log</span><span class="no-only">Refleksjonslogg</span></span></td><td class="en-only">Deep thinking about audience, purpose, and AI's failures</td><td class="no-only">Dyp tenkning om målgruppe, formål og KIs svakheter</td><td class="en-only">Student</td><td class="no-only">Elev</td><td>30–45 min</td></tr>
+      <tr><td><span class="badge badge-sky">4. <span class="en-only">Margin Comments</span><span class="no-only">Margkommentarer</span></span></td><td class="en-only">Careful close reading and real-time labelling of AI output</td><td class="no-only">Nøye nærlesing og merking av KI-output i sanntid</td><td class="en-only">Student</td><td class="no-only">Elev</td><td>20–30 min</td></tr>
+      <tr><td><span class="badge badge-lav">5. <span class="en-only">Screen Video</span><span class="no-only">Skjermvideo</span></span></td><td class="en-only">Demonstrating the full process dynamically with narration</td><td class="no-only">Demonstrere hele prosessen dynamisk med fortelling</td><td class="en-only">Student</td><td class="no-only">Elev</td><td>30–50 min</td></tr>
+      <tr><td><span class="badge badge-peach">6. <span class="en-only">Comparison Table</span><span class="no-only">Sammenligningstabell</span></span></td><td class="en-only">Understanding how writing shifts in tone and register across audiences</td><td class="no-only">Forstå hvordan skriving endres mellom målgrupper</td><td class="en-only">Student</td><td class="no-only">Elev</td><td>20 min</td></tr>
+      <tr><td><span class="badge badge-grey">7. <span class="en-only">Version History</span><span class="no-only">Versjonshistorikk</span></span></td><td class="en-only">Background check on writing timeline — with significant limitations</td><td class="no-only">Bakgrunnssjekk av skrivetidslinje — med betydelige begrensninger</td><td class="en-only">Teacher</td><td class="no-only">Lærer</td><td>5 min</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 class="en-only">Verification Tools — Teacher-facing, used after submission</h3>
+  <h3 class="no-only">Verifikasjonsverktøy — lærerrettet, brukes etter innlevering</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th><span class="en-only">Tool</span><span class="no-only">Verktøy</span></th><th><span class="en-only">What it checks</span><span class="no-only">Hva det sjekker</span></th><th><span class="en-only">Who</span><span class="no-only">Hvem</span></th><th><span class="en-only">Time</span><span class="no-only">Tid</span></th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-sage">Quick Talk</span></td>
+        <td class="en-only">Whether the student can explain their own work — audience, word choices, argument — out loud without notes. If they cannot, the work may not represent genuine understanding.</td>
+        <td class="no-only">Om eleven kan forklare sitt eget arbeid — målgruppe, ordvalg, argument — høyt uten notater. Hvis de ikke kan, representerer kanskje ikke arbeidet genuin forståelse.</td>
+        <td class="en-only">Teacher</td><td class="no-only">Lærer</td>
+        <td class="en-only">1–3 min per student</td><td class="no-only">1–3 min per elev</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-lav">AI-Generated Quiz</span></td>
+        <td class="en-only">Whether the student understood the content of their submission. 8 multiple-choice questions generated from the student's own text. Students who submitted AI work without reading it typically score below 5/8.</td>
+        <td class="no-only">Om eleven forsto innholdet i innleveringen sin. 8 flervalgsoppgaver generert fra elevens egen tekst. Elever som leverte KI-arbeid uten å lese det, scorer typisk under 5/8.</td>
+        <td class="en-only">Teacher / Student (self-check)</td><td class="no-only">Lærer / Elev (selvsjekk)</td>
+        <td class="en-only">5 min</td><td class="no-only">5 min</td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <h3 class="en-only">Transparency Platform — Declaration tool, English 2</h3>
+  <h3 class="no-only">Transparensplattform — erklæringsverktøy, English 2</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th><span class="en-only">Platform</span><span class="no-only">Plattform</span></th><th><span class="en-only">What it does</span><span class="no-only">Hva det gjør</span></th><th><span class="en-only">Who</span><span class="no-only">Hvem</span></th><th><span class="en-only">Time</span><span class="no-only">Tid</span></th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-rose">PETRA AI</span></td>
+        <td class="en-only">Students tick boxes declaring exactly how AI was used — idea generation, drafting, editing, grammar checking, translation. Creates a transparent record submitted alongside the work. Not a punishment; evidence of honest engagement.</td>
+        <td class="no-only">Elever krysser av i bokser og erklærer nøyaktig hvordan KI ble brukt — idégenerering, utkast, redigering, grammatikksjekk, oversettelse. Skaper et transparent register som leveres sammen med arbeidet. Ikke en straff; bevis på ærlig engasjement.</td>
+        <td class="en-only">Student</td><td class="no-only">Elev</td>
+        <td class="en-only">2–3 min</td><td class="no-only">2–3 min</td>
+      </tr>
+    </tbody>
+  </table></div>
+</section>
+
+</main>
+
+<footer>
+  <p>AI in the Writing Classroom · Barbara Anna Zielonka · Nannestad High School</p>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Nav scroll — use JS only, no href anchors that would navigate away
+  document.querySelectorAll('nav a[data-target]').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var id = this.getAttribute('data-target');
+      var el = document.getElementById(id);
+      if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      document.querySelectorAll('nav a').forEach(function(a){ a.classList.remove('active'); });
+      this.classList.add('active');
+      document.getElementById('sidebar').classList.remove('open');
+    });
+  });
+
+  // Mobile burger
+  document.getElementById('menuBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+
+  // Scroll spy
+  var sections = document.querySelectorAll('section[id]');
+  var navLinks = document.querySelectorAll('nav a[data-target]');
+  if ('IntersectionObserver' in window) {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          navLinks.forEach(function(a) {
+            a.classList.toggle('active', a.getAttribute('data-target') === entry.target.id);
+          });
+        }
+      });
+    }, { rootMargin: '-20% 0px -60% 0px' });
+    sections.forEach(function(s) { obs.observe(s); });
+  }
+});
+
+function toggleAcc(btn) {
+  var c = btn.nextElementSibling;
+  var open = btn.classList.contains('open');
+  btn.classList.toggle('open', !open);
+  c.classList.toggle('open', !open);
+}
+
+function setLang(lang) {
+  document.getElementById('body-root').className = 'lang-' + lang;
+  document.getElementById('btnEn').classList.toggle('active', lang === 'en');
+  document.getElementById('btnNo').classList.toggle('active', lang === 'no');
+  document.getElementById('html-root').setAttribute('lang', lang === 'no' ? 'nb' : 'en');
+}
+</script>
+</body>
+</html>
